@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+
 
 import javax.transaction.Transactional;
 
@@ -43,12 +43,14 @@ public class SampleCommandLine implements CommandLineRunner {
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
-		List<Genre> genres=List.of(new Genre("Action"),new Genre("Adventure"),new Genre("Mecha"),new Genre("Slice of life")
-				,new Genre("Manhwa"), new Genre("Manga"), new Genre("Material Arts"), new Genre("Dramma"),new Genre("Historical")
-				);
-		genreRepository.saveAll(genres);
 		
-		List<Genre> mutableGenres=new ArrayList<Genre>(genres);
+		
+		ArrayList<Genre> mutableGenres=new ArrayList<Genre>(Arrays.asList(new Genre[] {
+				new Genre("Action"),new Genre("Adventure"),new Genre("Mecha"),new Genre("Slice of life")
+				,new Genre("Manhwa"), new Genre("Manga"), new Genre("Material Arts"), new Genre("Dramma"),new Genre("Historical")
+				
+		}));
+		genreRepository.saveAll(mutableGenres);
 		int count_sample=18;
 		String comicNames[]=new String[] {
 				"Solo leveling",
@@ -139,7 +141,7 @@ public class SampleCommandLine implements CommandLineRunner {
 		for(int i=0;i<count_sample;i++) {
 			Comic comic=new Comic(comicNames[i],descriptions[i],authors[i]);
 			
-			List<Genre> g=new ArrayList<Genre>();
+			ArrayList<Genre> g=new ArrayList<Genre>();
 			int randomGenreCount=(int)Math.round(Math.random()*6+1);
 			Collections.shuffle(mutableGenres);
 			for(int j=0;j<randomGenreCount;j++) {
