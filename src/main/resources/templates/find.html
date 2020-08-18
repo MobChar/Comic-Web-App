@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>My comic web app</title>
+</head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Helvetica">
+<script>
+function 
+	onSelectedFindSortType(selectElement) {
+		//Change location
+		const params = new URLSearchParams(window.location.search);
+		window.location = "/find?genre="+params.get("genre")+"&order="+selectElement.value+"&page="+params.get("page");
+	}
+function
+	onPaging(index){
+		const params = new URLSearchParams(window.location.search);
+		 return "/find?genre="+params.get("genre")+"&order="+params.get("order")+"&page="+(index);
+	}
+</script>
+<style>
+body {
+	margin: 0;
+	font-family: "Helvetica";
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #00dc64;
+}
+
+#logo {
+	width: 133px;
+	height: 88px;
+	display: inline-block;
+	margin: auto;
+}
+
+.logo-container {
+	position: relative;
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	float: left;
+	width: 100px;
+}
+
+#nav-menu {
+	background-color: white;
+	overflow: hidden;
+	float: left;
+	font-size: 30px;
+	width: 60%;
+}
+
+/* Style the links inside the navigation bar */
+#nav-menu a {
+	color: black;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 17px;
+	float: left;
+}
+
+/* Change the color of links on hover */
+#nav-menu a:hover {
+	color: #00dc64;
+}
+
+#nav-menu a.active {
+	color: #00dc64;
+}
+
+.nav-bar {
+	background-color: white;
+	width: 100%;
+	height: 100px;
+}
+
+.genre-menu {
+	display: none;
+	z-index: 2;
+	position: absolute;
+	top: 10%;
+	left: 15%;
+	height: auto;
+	width: 160px;
+	background-color: #f9f9f9;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.genre-menu>a {
+	width: 100%;
+	height: 30px;
+	display: block;
+	float: left;
+}
+
+.dropdown:hover .genre-menu {
+	display: block;
+}
+
+.main-banner-wrap {
+	position: relative;
+	height: 490px;
+	width: 100%;
+}
+
+#main-banner-list>div {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#main-banner-list>div>img {
+	width: 70%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.banner-logo-container {
+	position: absolute;
+	height: 100%;
+	width: 30%;
+	margin-left: 60%;
+	padding-top: 37px;
+}
+
+.banner-logo-container>img:first-child {
+	margin-bottom: -16px;
+}
+
+.banner-logo-container>img {
+	float: right;
+	max-width: 100%;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.daily-wrap {
+	background-color: #f4f4f4;
+	width: 100%;
+	heigth: auto;
+	text-align:center;
+}
+
+
+.daily-tab {
+	height: 60px;
+	background-color: white;
+	width: 100%;
+}
+
+
+.func-label {
+
+	position: relative;
+	width: 240px;
+	height: 60px;
+	background-color: #00dc64;
+	text-align: center;
+	margin:0;
+	display: inline-block;
+	float:left;
+}
+
+.func-label > p {
+	color: white;
+	margin: auto;
+	font-size:20px;
+	line-height: 60px;
+}
+
+#find-sort-type{
+	display: inline-block;
+	float:left;
+	margin-top:20px;
+	margin-left:10px;
+}
+
+
+.comics-grid-container {
+	position: relative;
+	display: inline-grid;
+	grid-auto-flow: row;
+	height: auto;
+	margin: 30px auto;
+	background-color: transparent;
+	grid-column-gap: 30px;
+	grid-row-gap: 30px;
+	grid-template-rows: max-content;
+	grid-template-columns: 220px 220px 220px 220px 220px;
+	text-align:left;
+}
+
+.comic-grid-item {
+	position: relative;
+	background-color: white;
+	width: 220px;
+	height: auto;
+	overflow-wrap: break-word;
+	box-shadow: 2px 2px 2px 2px #888888;
+}
+
+.comic-thumb {
+	z-index: 2;
+	display: block;
+	width: 220px;
+	height: 220px;
+	position: absolute;
+}
+
+.comic-thumb:hover {
+	opacity: 0;
+}
+
+.description {
+	z-index: 1;
+	positon: absolute;
+	display: inline-block;
+	margin: auto;
+	float: top;
+	width: 220px;
+	height: 220px;
+	color: white;
+	font-style: italic;
+	font-size: 13px;
+}
+
+.description>div {
+	overflow-wrap: break-word;
+	overflow: hidden;
+	width: 180px;
+	height: 180px;
+	margin: 20px 20px 20px 20px;
+}
+
+.comic-info {
+	width: 200px;
+	padding: 0px 10px 10px 10px;
+	margin-top: -5px;
+}
+
+.comic-name {
+	color: black;
+	top: 0px;
+	margin: 0;
+	height: 25px;
+	font-size: 18px;
+}
+
+.chapter-link {
+	color: #b1b1b1;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	font-size: 14px;
+	height: 28px;
+}
+
+.pagination {
+	display: inline-block;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 8px 16px;
+	text-decoration: none;
+}
+
+.pagination a.active {
+	background-color: #00dc64;
+	color: white;
+}
+
+.pagination a:hover:not(.active) {
+	background-color: #ddd;
+}
+</style>
+<body>
+	<header>
+		<div class="nav-bar">
+			<div class="logo-container">
+				<img id="logo"
+					src="https://cdn.vox-cdn.com/thumbor/qyUvhWQpC61vjDAf7Qgb95q0WdY=/0x64:1600x1131/1200x800/filters:focal(0x64:1600x1131)/cdn.vox-cdn.com/uploads/chorus_image/image/49612017/DC_Logo_Blue_Final_573b356bd056a9.41641801.0.0.jpg">
+			</div>
+			<ul id="nav-menu">
+				<a href="/" class="active">HOME</a>
+				<div class="dropdown">
+					<a href="/">GENRES</a>
+					<div class="dropdown-content">
+						<div class="genre-menu">
+							<a th:each="genre :${genres}" th:href="'/find?genre='+${genre.id}+'&order=latest&page=1'" th:text="${genre.name}"></a>
+						</div>
+					</div>
+				</div>
+				<a href="#about">ABOUT</a>
+			</ul>
+
+
+
+
+		</div>
+	</header>
+
+
+	<div class="main-banner-wrap"
+		style="background: url(https://webtoons-static.pstatic.net/image/pc/home_bg013.jpg) no-repeat 50% 0; background-size: cover;">
+		<div id="main-banner-list">
+			<div th:each="banner: ${banners}">
+				<img th:src="${banner}">
+			</div>
+		</div>
+		<div class="banner-logo-container">
+			<img
+				src="https://webtoon-phinf.pstatic.net/20200331_212/1585600755872ILNbK_PNG/How-to-Publish-Webtoon-Canvas.png">
+			<img
+				src="https://webtoon-phinf.pstatic.net/20200413_263/1586741284895FBHyj_PNG/PC_Small_Lower_eng.png">
+		</div>
+
+	</div>
+
+	<div class="daily-wrap">
+		<div class="daily-tab">
+			<div class="func-label">
+				<p th:text="${findGenre.name}" ></p>
+			</div>
+			<div  id="find-sort-type">
+			Sort by: 
+			<select onchange="onSelectedFindSortType(this)">
+				<option value="latest">Latest update</option>
+				<option value="view">View</option>
+			</select>
+			</div>
+		</div>
+		<div class="grid-wrapper">
+		<div class="comics-grid-container">
+			<div class="comic-grid-item" th:each="comic, iter : ${comics}">
+				<img class="comic-thumb" th:src="${thumbImages.get(iter.index)}">
+				<div class="description">
+					<div>
+						<p th:text="'Views: '+${comic.viewCount}"></p>
+						<p th:text="'Author: '+${comic.author}"></p>
+						<p th:text="${comic.description}"></p>
+					</div>
+				</div>
+				<div class="comic-info">
+					<div class="comic-name">
+						<a th:href="'/comic/'+${comic.id}"><p th:text="${comic.name}"></p></a>
+					</div>
+					<a class="chapter-link"
+						th:each="chapter :${comicChapters.get(iter.index)}"
+						th:href="'/comic/'+${comic.id}+'/chapter/'+${chapter.id}+'?view=A'"><p
+							th:text="${chapter.title}"></p></a>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="pagination">
+			<a class="pag-ref" th:if="${pageCount}>0" th:each="i: ${#numbers.sequence(1, pageCount)}" th:text="${i}"  th:href="'/?page='+${i}"></a>
+		</div>
+	</div>
+
+
+
+
+	<script>
+		$("#main-banner-list > div:gt(0)").hide();
+
+		setInterval(function() {
+			$('#main-banner-list > div:first').fadeOut(1000).next()
+					.fadeIn(1000).end().appendTo('#main-banner-list');
+		}, 6000);
+		
+		function shuffle(array) {
+			var currentIndex = array.length, temporaryValue, randomIndex;
+
+			// While there remain elements to shuffle...
+			while (0 !== currentIndex) {
+
+				// Pick a remaining element...
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex -= 1;
+
+				// And swap it with the current element.
+				temporaryValue = array[currentIndex];
+				array[currentIndex] = array[randomIndex];
+				array[randomIndex] = temporaryValue;
+			}
+
+			return array;
+		}
+
+		var colorPalete = [ "#00B19A", "#465775", "#56E39F", "#F7EC59",
+				"#FF66D8", "#F75C03", "#00CC66", "#2274A5", "#340068",
+				"#FF6978", "#B1EDE8", "#B1EDE8" ];
+		colorPalete = shuffle(colorPalete);
+		var i;
+		var es = document.getElementsByClassName("description");
+		for (i = 0; i < es.length; i++) {
+			es[i].style.backgroundColor = colorPalete[i];
+		}
+		
+		
+		var ss=document.getElementById("find-sort-type");
+		const params = new URLSearchParams(window.location.search);
+		if(params.get("order")=="latest")
+		ss.selectedIndex= 0;
+		else ss.selectedIndex= 1;
+		
+		
+
+		
+		var page=1;
+		if(params.get("page")!=null) page=params.get("page");
+		console.log(page);
+		var epref=document.getElementsByClassName("pag-ref");
+		for (i = 0; i < epref.length; i++) {
+			if(i+1==page)
+			epref[i].classList.add("active");
+			epref[i].href=onPaging(i+1);
+		}
+	</script>
+</body>
+</html>

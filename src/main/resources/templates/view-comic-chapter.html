@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>My comic web app</title>
+<style>
+body {
+	margin: 0;
+	width: 100%;
+	background-color: black;
+	width: 100%;
+	white-space: nowrap;
+}
+
+.comic-image {
+	max-width: 90%;
+}
+
+.img-container {
+	text-align: center;
+	font-size: 0;
+}
+
+#chapter-nav {
+	width: 100%;
+	background-color: red;
+	text-align: center;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: position 10s;
+	-ms-transition: position 10s;
+	-o-transition: position 10s;
+	transition: all 0.5s ease;
+}
+
+.sticky-nav {
+	position: fixed;
+	top: 0;
+	animation: smoothScroll 1s forwards;
+}
+
+@keyframes smoothScroll { 
+	0% {
+		transform: translateY(-40px);
+	}
+	100%{
+		transform:translateY(0px);
+	}
+}
+</style>
+<script>	
+		function onSelectedChapter(selectElement){
+			//Change location
+			let currentLocation=window.location+"";
+			let startRemovePos=currentLocation.lastIndexOf("/");
+			window.location=currentLocation.slice(0,startRemovePos+1)+selectElement.value+"?view=A";
+		}
+		function onSelectedServer(selectElement){
+			//Change location
+			let currentLocation=window.location+"";
+			let startRemovePos=currentLocation.lastIndexOf("=");
+			window.location=currentLocation.slice(0,startRemovePos+1)+selectElement.value;
+		}
+</script>
+</head>
+<body>
+	<div id="chapter-nav">
+		<span th:text="${comic.name+' > '+chapters.get(current_chapter_index).title}" style="float:left;"></span>
+		<a class="prev-chapter" th:if="${current_chapter_index}>0" th:href="${chapters.get(current_chapter_index-1).id+'?view=A'}">Prev</a>
+		<a class="prev-chapter" th:unless="${current_chapter_index}>0" style="visibility: hidden;">Prev</a>
+		<select  onchange="onSelectedChapter(this)">
+			<option th:each="chapter,iter :${chapters}" th:value="${chapter.id}" th:if="${current_chapter_index}==${iter.index}" selected>
+				<p th:text="${chapter.title}"></p>
+			</option>
+			<option th:each="chapter,iter :${chapters}" th:value="${chapter.id}" th:unless="${current_chapter_index}==${iter.index}">
+				<p th:text="${chapter.title}"></p>
+			</option>
+		</select>
+		<a class="next-chapter" th:if="${current_chapter_index}<${chapters.size()}-1" th:href="${chapters.get(current_chapter_index+1).id+'?view=A'}">Next</a>
+		<a class="next-chapter" th:unless="${current_chapter_index}<${chapters.size()}-1" style="visibility: hidden;">Next</a>
+		<select id="selectServer" onchange="onSelectedServer(this)">
+			<option th:value="A" selected>
+				<p>Server A</p>
+			</option>
+			<option th:value="B">
+				<p>Server B</p>
+			</option>
+			
+		</select>
+	</div>
+
+
+
+	<div id="chapter-image-view">
+		<div th:class="img-container" th:each="comicImage : ${comicImages}"><img th:class="comic-image" th:src="${comicImage}"></div>
+	<div>
+
+
+
+
+			<script>
+			
+				//Stick header
+				window.onscroll = function() {
+					stickHeader();
+				};
+
+				//Get the header
+				var header = document.getElementById("chapter-nav");
+
+				//Get the offset position of the navbar
+				var sticky = header.offsetTop;
+				function stickHeader() {
+					if (window.pageYOffset > sticky) {
+						header.classList.add("sticky-nav");
+					} else {
+						header.classList.remove("sticky-nav");
+					}
+				}
+				
+				var ss=document.getElementById("selectServer");
+				const params = new URLSearchParams(window.location.search);
+				if(params.get("view")=='A')
+				ss.selectedIndex= 0;
+				else ss.selectedIndex= 1;
+				
+			</script>
+</body>
+</html>
